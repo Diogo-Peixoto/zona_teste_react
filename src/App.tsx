@@ -15,44 +15,43 @@ import {
 import useImage from "use-image";
 import { Portal } from "react-konva-utils";
 
+function downloadURI(uri: string, name: string) {
+  let link = document.createElement("a");
+  link.download = name;
+  link.href = uri;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 function App() {
-  const [isDragging, setDragging] = useState(false);
+  const stageRef = useRef<any>(null);
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  const handleExport = () => {
+    const uri = stageRef.current.toDataURL();
+    downloadURI(uri, "stage.pdf");
+  };
 
   return (
-    <Stage width={window.innerWidth - 20} height={window.innerHeight - 20}>
-      <Layer>
-        <Portal selector=".top-layer" enabled={isDragging}>
+    <>
+      <button onClick={handleExport}>Click here to log stage data URL</button>
+      <Stage ref={stageRef} width={width - 20} height={height - 20}>
+        <Layer>
+          <Rect x={0} y={0} width={80} height={80} fill="red" />
+          <Rect x={width - 80} y={0} width={80} height={80} fill="red" />
           <Rect
-            x={20}
-            y={50}
-            width={150}
-            height={150}
+            x={width - 80}
+            y={height - 80}
+            width={80}
+            height={80}
             fill="red"
-            draggable
-            onDragStart={() => {
-              setDragging(true);
-            }}
-            onDragEnd={() => {
-              setDragging(false);
-            }}
           />
-        </Portal>
-        <Circle x={200} y={100} radius={50} fill="green" />
-        <Line
-          x={20}
-          y={200}
-          points={[0, 0, 100, 0, 100, 100]}
-          tension={0.5}
-          closed
-          stroke="black"
-          fillLinearGradientStartPoint={{ x: -50, y: -50 }}
-          fillLinearGradientEndPoint={{ x: 50, y: 50 }}
-          fillLinearGradientColorStops={[0, "red", 1, "yellow"]}
-          draggable
-        />
-      </Layer>
-      <Layer name="top-layer" />
-    </Stage>
+          <Rect x={0} y={height - 80} width={80} height={80} fill="red" />
+        </Layer>
+      </Stage>
+    </>
   );
 }
 
