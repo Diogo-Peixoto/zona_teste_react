@@ -1,40 +1,34 @@
 import React, { Component, useEffect, useRef, useState } from "react";
 import Konva from "konva";
 import { createRoot } from "react-dom/client";
-import { Stage, Layer, Rect, Image } from "react-konva";
+import { Stage, Layer, Rect, Image, Text } from "react-konva";
 import useImage from "use-image";
 
 function App() {
-  const [image] = useImage("https://konvajs.org/assets/lion.png", "anonymous");
-  const imageRef = useRef<any>(null);
-
-  const [color, setColor] = useState({ color: "green" });
-
-  function handleClick() {
-    setColor({ color: Konva.Util.getRandomColor() });
-    if (image) {
-      imageRef.current.cache();
-    }
-  }
-
-  useEffect(() => {
-    if (image) {
-      imageRef.current.cache();
-    }
-  }, [image]);
-
+  const [element, setElement] = useState({
+    isDragging: false,
+    x: 50,
+    y: 50,
+  });
   return (
     <Stage width={window.innerWidth} height={window.innerHeight}>
       <Layer>
-        <Image
-          ref={imageRef}
-          image={image}
-          filters={[Konva.Filters.Noise]}
-          blurRadius={10}
-          x={10}
-          y={10}
-          fill={color.color}
-          onClick={() => handleClick()}
+        <Text
+          text="Is Dragglabe Text"
+          draggable
+          x={element.x}
+          y={element.y}
+          fill={element.isDragging ? "red" : "green"}
+          onDragStart={() => {
+            setElement({ ...element, isDragging: true });
+          }}
+          onDragEnd={(e) => {
+            setElement({
+              isDragging: false,
+              x: e.target.x(),
+              y: e.target.y(),
+            });
+          }}
         />
       </Layer>
     </Stage>
