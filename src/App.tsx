@@ -11,27 +11,24 @@ import {
   Transformer,
 } from "react-konva";
 import useImage from "use-image";
-import { KonvaEventListener } from "konva/lib/Node";
+import { Html } from "react-konva-utils";
 
 function App() {
-  const changeSize = (e: any) => {
-    e.target.to({
-      scaleX: Math.random() + 0.8,
-      scaleY: Math.random() + 0.8,
-      duration: 0.2,
-    });
-  };
-
   return (
     <Stage width={window.innerWidth - 20} height={window.innerHeight - 20}>
       <Layer>
-        <Rect
-          draggable
-          onDragStart={changeSize}
-          fill="green"
-          width={100}
-          height={100}
-        />
+        <Html
+          divProps={{
+            style: {
+              position: "absolute",
+              top: 10,
+              left: 10,
+            },
+          }}
+        >
+          <input placeholder="Estou dentro do canvas" />
+        </Html>
+        <Rect x={20} y={20} width={50} height={50} fill="red" shadowBlur={5} />
       </Layer>
     </Stage>
   );
