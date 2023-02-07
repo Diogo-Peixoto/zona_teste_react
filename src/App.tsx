@@ -1,80 +1,41 @@
-import { useState } from "react";
-import {
-  Stage,
-  Layer,
-  Rect,
-  Circle,
-  Text,
-  Line,
-  Shape,
-  Star,
-} from "react-konva";
-
-function generateShapes() {
-  return [...Array(3)].map((_, i) => ({
-    id: i.toString(),
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
-    rotation: Math.random() * 180,
-    isDragging: false,
-  }));
-}
+import React, { Component, useEffect, useRef, useState } from "react";
+import Konva from "konva";
+import { createRoot } from "react-dom/client";
+import { Stage, Layer, Rect, Image } from "react-konva";
+import useImage from "use-image";
 
 function App() {
-  const [stars, setStars] = useState(generateShapes());
+  const [image] = useImage("https://konvajs.org/assets/lion.png", "anonymous");
+  const imageRef = useRef<any>(null);
 
-  const handleDragStart = (e: any) => {
-    const id = e.target.id();
-    setStars(
-      stars.map((star) => {
-        return {
-          ...star,
-          isDragging: star.id === id, // mesma coise de ferificar a strela igual
-        };
-      })
-    );
-  };
+  const [color, setColor] = useState({ color: "green" });
 
-  const handleDragEnd = (e: any) => {
-    console.log(e);
-    setStars(
-      stars.map((star) => {
-        return {
-          ...star,
-          isDragging: false,
-        };
-      })
-    );
-  };
+  function handleClick() {
+    setColor({ color: Konva.Util.getRandomColor() });
+    if (image) {
+      imageRef.current.cache();
+    }
+  }
+
+  useEffect(() => {
+    if (image) {
+      imageRef.current.cache();
+    }
+  }, [image]);
 
   return (
     <Stage width={window.innerWidth} height={window.innerHeight}>
       <Layer>
-        <Text text="Try to drag a star" />
-        {stars.map((star) => (
-          <Star
-            key={star.id}
-            id={star.id}
-            x={star.x}
-            y={star.y}
-            numPoints={5}
-            innerRadius={20}
-            outerRadius={40}
-            fill="#89b717"
-            opacity={0.8}
-            draggable
-            rotation={star.rotation}
-            shadowColor="black"
-            shadowBlur={10}
-            shadowOpacity={0.6}
-            shadowOffsetX={star.isDragging ? 10 : 5}
-            shadowOffsetY={star.isDragging ? 10 : 5}
-            scaleX={star.isDragging ? 1.2 : 1}
-            scaleY={star.isDragging ? 1.2 : 1}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-          />
-        ))}
+        <Image
+          ref={imageRef}
+          image={image}
+          filters={[Konva.Filters.Noise]}
+          blurRadius={10}
+          x={10}
+          y={10}
+          fill={color.color}
+          onClick={() => handleClick()}
+        />
       </Layer>
     </Stage>
   );
