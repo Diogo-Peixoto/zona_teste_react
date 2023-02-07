@@ -4,8 +4,8 @@ import { createRoot } from "react-dom/client";
 import { Stage, Layer, Rect, Image, Text, Circle } from "react-konva";
 import useImage from "use-image";
 
-const pulseShape = (shape: any) => {
-  shape.to({
+const pulseShape = (shape: Konva.Circle | null) => {
+  shape?.to({
     scaleX: 1.5,
     scaleY: 1.5,
     onFinish: () => {
@@ -18,7 +18,7 @@ const pulseShape = (shape: any) => {
 };
 
 function App() {
-  const circleRef = useRef(null);
+  const circleRef = useRef<Konva.Circle | null>(null);
 
   const handleStageClick = () => {
     const shape = circleRef.current;
