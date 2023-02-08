@@ -15,43 +15,82 @@ import {
 import useImage from "use-image";
 import { Portal } from "react-konva-utils";
 
-function downloadURI(uri: string, name: string) {
-  let link = document.createElement("a");
-  link.download = name;
-  link.href = uri;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+interface Istep {
+  x: number;
+  y: number;
 }
 
-function App() {
-  const stageRef = useRef<any>(null);
-  const width = window.innerWidth;
-  const height = window.innerHeight;
+interface IHistory {
+  currentStep: number;
+  step: Array<Istep>;
+}
 
-  const handleExport = () => {
-    const uri = stageRef.current.toDataURL();
-    downloadURI(uri, "stage.pdf");
-  };
+let history = [
+  {
+    x: 20,
+    y: 20,
+  },
+];
+
+let historyStep = 0;
+
+function App() {
+  const [position, setposition] = useState(history[0]);
+
+  function handleUndo() {
+    if (historyStep === 0) {
+      return;
+    }
+
+    historyStep -= 1;
+
+    const previous = history[historyStep];
+
+    setposition(previous);
+  }
+
+  function handleRedo() {
+    if (historyStep === history.length - 1) {
+      return;
+    }
+
+    historyStep += 1;
+
+    const next = history[historyStep];
+
+    setposition(next);
+  }
+
+  function handleDragEnd(e: any) {
+    history = history.slice(0, historyStep + 1);
+
+    const pos = {
+      x: e.target.x(),
+      y: e.target.y(),
+    };
+
+    history = [...history, pos];
+    historyStep += 1;
+    console.log(history);
+    setposition(pos);
+  }
 
   return (
-    <>
-      <button onClick={handleExport}>Click here to log stage data URL</button>
-      <Stage ref={stageRef} width={width - 20} height={height - 20}>
-        <Layer>
-          <Rect x={0} y={0} width={80} height={80} fill="red" />
-          <Rect x={width - 80} y={0} width={80} height={80} fill="red" />
-          <Rect
-            x={width - 80}
-            y={height - 80}
-            width={80}
-            height={80}
-            fill="red"
-          />
-          <Rect x={0} y={height - 80} width={80} height={80} fill="red" />
-        </Layer>
-      </Stage>
-    </>
+    <Stage width={window.innerWidth - 20} height={window.innerHeight - 20}>
+      <Layer>
+        <Text text="undo" onClick={handleUndo} />
+        <Text text="redo" x={40} onClick={handleRedo} />
+        <Rect
+          x={position.x}
+          y={position.y}
+          width={50}
+          height={50}
+          fill="black"
+          draggable
+          onDragEnd={handleDragEnd}
+        />
+      </Layer>
+    </Stage>
   );
 }
 
