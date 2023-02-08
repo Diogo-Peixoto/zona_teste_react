@@ -1,4 +1,11 @@
-import React, { Component, Fragment, useEffect, useRef, useState } from "react";
+import React, {
+  Component,
+  DragEventHandler,
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Konva from "konva";
 import { createRoot } from "react-dom/client";
 import {
@@ -11,84 +18,76 @@ import {
   Transformer,
   Group,
   Line,
+  KonvaNodeComponent,
+  KonvaNodeEvents,
 } from "react-konva";
 import useImage from "use-image";
 import { Portal } from "react-konva-utils";
+import { utimes } from "fs";
+import { KonvaEventObject } from "konva/lib/Node";
 
-interface Istep {
-  x: number;
-  y: number;
+function generateItems() {
+  const items = [];
+  for (let i = 0; i < 5; i++) {
+    items.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      id: "node-" + i,
+      color: Konva.Util.getRandomColor(),
+    });
+  }
+  return items;
 }
-
-interface IHistory {
-  currentStep: number;
-  step: Array<Istep>;
-}
-
-let history = [
-  {
-    x: 20,
-    y: 20,
-  },
-];
-
-let historyStep = 0;
 
 function App() {
-  const [position, setposition] = useState(history[0]);
+  const [items, setItems] = useState<Array<any>>(generateItems());
 
-  function handleUndo() {
-    if (historyStep === 0) {
-      return;
-    }
+  function handleDragStart(e: any) {
+    const id = e.target.name();
+    const itemSlice = items.slice();
+    const item = items.find((i) => i.id === id);
+    const index = items.indexOf(item);
 
-    historyStep -= 1;
+    itemSlice.splice(index, 1);
 
-    const previous = history[historyStep];
+    itemSlice.push(item);
 
-    setposition(previous);
-  }
-
-  function handleRedo() {
-    if (historyStep === history.length - 1) {
-      return;
-    }
-
-    historyStep += 1;
-
-    const next = history[historyStep];
-
-    setposition(next);
+    setItems(itemSlice);
   }
 
   function handleDragEnd(e: any) {
-    history = history.slice(0, historyStep + 1);
+    const id = e.target.name();
+    const itemSlice = items.slice();
+    const item = items.find((i) => i.id === id);
+    const index = items.indexOf(item);
 
-    const pos = {
+    itemSlice[index] = {
+      ...item,
       x: e.target.x(),
       y: e.target.y(),
     };
 
-    history = [...history, pos];
-    historyStep += 1;
-    console.log(history);
-    setposition(pos);
+    setItems(itemSlice);
   }
 
   return (
     <Stage width={window.innerWidth - 20} height={window.innerHeight - 20}>
       <Layer>
-        <Text text="undo" onClick={handleUndo} />
-        <Text text="redo" x={40} onClick={handleRedo} />
-        <Rect
-          x={position.x}
-          y={position.y}
-          width={50}
-          height={50}
-          fill="black"
-          draggable
-          onDragEnd={handleDragEnd}
-        />
+        {items.map((item) => {
+          return (
+            <Circle
+              key={item.id}
+              name={item.id}
+              draggable
+              x={item.x}
+              y={item.y}
+              fill={item.color}
+              radius={50}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+            />
+          );
+        })}
       </Layer>
     </Stage>
   );
