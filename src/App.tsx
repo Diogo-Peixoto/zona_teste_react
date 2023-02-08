@@ -1,95 +1,51 @@
-import React, {
-  Component,
-  DragEventHandler,
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import Konva from "konva";
-import { createRoot } from "react-dom/client";
-import {
-  Stage,
-  Layer,
-  Rect,
-  Image,
-  Text,
-  Circle,
-  Transformer,
-  Group,
-  Line,
-  KonvaNodeComponent,
-  KonvaNodeEvents,
-} from "react-konva";
-import useImage from "use-image";
-import { Portal } from "react-konva-utils";
-import { utimes } from "fs";
-import { KonvaEventObject } from "konva/lib/Node";
+import { useRef, useState } from "react";
 
-function generateItems() {
-  const items = [];
-  for (let i = 0; i < 5; i++) {
-    items.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      id: "node-" + i,
-      color: Konva.Util.getRandomColor(),
-    });
-  }
-  return items;
-}
+import { Stage, Layer } from "react-konva";
+import URLImage from "./components/Image";
 
 function App() {
-  const [items, setItems] = useState<Array<any>>(generateItems());
-
-  function handleDragStart(e: any) {
-    const id = e.target.name();
-    const itemSlice = items.slice();
-    const item = items.find((i) => i.id === id);
-    const index = items.indexOf(item);
-
-    itemSlice.splice(index, 1);
-
-    itemSlice.push(item);
-
-    setItems(itemSlice);
-  }
-
-  function handleDragEnd(e: any) {
-    const id = e.target.name();
-    const itemSlice = items.slice();
-    const item = items.find((i) => i.id === id);
-    const index = items.indexOf(item);
-
-    itemSlice[index] = {
-      ...item,
-      x: e.target.x(),
-      y: e.target.y(),
-    };
-
-    setItems(itemSlice);
-  }
+  const [images, setImages] = useState([]);
+  const dragURL = useRef();
+  const stageRef = useRef<any>();
 
   return (
-    <Stage width={window.innerWidth - 20} height={window.innerHeight - 20}>
-      <Layer>
-        {items.map((item) => {
-          return (
-            <Circle
-              key={item.id}
-              name={item.id}
-              draggable
-              x={item.x}
-              y={item.y}
-              fill={item.color}
-              radius={50}
-              onDragStart={handleDragStart}
-              onDragEnd={handleDragEnd}
-            />
+    <>
+      <img
+        alt="lion"
+        src={"https://konvajs.org/assets/lion.png"}
+        draggable
+        onDragStart={(e: any) => {
+          dragURL.current = e.target.src;
+        }}
+      />
+      <div
+        onDrop={(e) => {
+          e.preventDefault();
+          stageRef.current.setPointersPositions(e);
+
+          setImages(
+            images.concat({
+              ...stageRef.current.getPointerPosition(),
+              src: dragURL.current,
+            })
           );
-        })}
-      </Layer>
-    </Stage>
+        }}
+        onDragOver={(e) => e.preventDefault()}
+      >
+        <Stage
+          width={window.innerWidth}
+          height={window.innerHeight}
+          style={{ border: "1px solid grey" }}
+          ref={stageRef}
+        >
+          <Layer>
+            {images.map((image: any) => (
+              <URLImage image={image} />
+            ))}
+          </Layer>
+        </Stage>
+      </div>
+    </>
   );
 }
 
