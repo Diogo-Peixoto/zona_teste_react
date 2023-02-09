@@ -1,12 +1,27 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Stage, Layer } from "react-konva";
 import URLImage from "./components/Image";
 
 function App() {
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<any>([]);
+  const [selectedId, setSectShape] = useState(null);
   const dragURL = useRef();
   const stageRef = useRef<any>();
+
+  //Armazenamento localStorage
+  useEffect(() => {
+    if (images[0]) {
+      window.localStorage.setItem("data", JSON.stringify(images));
+    }
+  }, [images]);
+
+  useEffect(() => {
+    const data: any = window.localStorage.getItem("data");
+    setImages(JSON.parse(data));
+  }, []);
+
+  console.log(images);
 
   return (
     <>
@@ -27,6 +42,7 @@ function App() {
             images.concat({
               ...stageRef.current.getPointerPosition(),
               src: dragURL.current,
+              id: images.length,
             })
           );
         }}
@@ -39,8 +55,24 @@ function App() {
           ref={stageRef}
         >
           <Layer>
-            {images.map((image: any) => (
-              <URLImage image={image} />
+            {images.map((image: any, index: number) => (
+              <URLImage
+                image={image}
+                isSelect={image.id === selectedId}
+                onSelect={() => {
+                  setSectShape(image.id);
+                }}
+                key={index}
+                onChange={(newAttrs: any) => {
+                  const previusArray: Array<any> = images.slice();
+                  const item = previusArray.find(
+                    (item) => item.id === newAttrs.id
+                  );
+                  const index = previusArray.lastIndexOf(item);
+                  previusArray[index] = newAttrs;
+                  setImages(previusArray);
+                }}
+              />
             ))}
           </Layer>
         </Stage>
