@@ -7518,19 +7518,10 @@ react-konva-utils@^0.3.2:
     react-konva "^18.0.0-0"
     use-image "^1.1.0"
 
-react-konva@^18.0.0-0:
+react-konva@^18.0.0-0, react-konva@^18.2.4:
   version "18.2.4"
   resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-18.2.4.tgz#f5f63d07bb287d3edf7eee35612282ddc55a6d6f"
   integrity sha512-cVo0+L8PjUSrSAMLlutwRiI1t8koU4Z6EOsbrWxuXvTwNXG3qd0wFoNBBVGjOQgZX9hqufbK7NEQdfqlKve9jQ==
-  dependencies:
-    its-fine "^1.0.6"
-    react-reconciler "~0.29.0"
-    scheduler "^0.23.0"
-
-react-konva@^18.2.3:
-  version "18.2.3"
-  resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-18.2.3.tgz#75c658fca493bdf515b38f2a8d544fa7a9c754c4"
-  integrity sha512-OPxjBTgaEGU9pt/VJSVM7QNXYHEZ5CkulX+4fTTvbaH+Wh+vMLbXmH3yjWw4kT/5Qi6t0UQKHPPmirCv8/9sdg==
   dependencies:
     its-fine "^1.0.6"
     react-reconciler "~0.29.0"

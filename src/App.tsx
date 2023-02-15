@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { Stage, Layer } from "react-konva";
 import URLImage from "./components/Image";
 
+import "./styles/style.css";
+
 function App() {
   const [images, setImages] = useState<any>([]);
   const [selectedId, setSectShape] = useState(null);
@@ -21,10 +23,8 @@ function App() {
     setImages(JSON.parse(data));
   }, []);
 
-  console.log(images);
-
   return (
-    <>
+    <div className="container">
       <img
         alt="lion"
         src={"https://konvajs.org/assets/lion.png"}
@@ -77,7 +77,7 @@ function App() {
           </Layer>
         </Stage>
       </div>
-    </>
+    </div>
   );
 }
 
