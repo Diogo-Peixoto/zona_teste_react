@@ -1,7 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import Editor from "./modules/Editor/pages";
+import GlobalStyled from "./style/global";
 
 function App() {
-  return <div></div>;
+  return (
+    <>
+      <Editor />
+
+      <GlobalStyled />
+    </>
+  );
 }
 
 export default App;
