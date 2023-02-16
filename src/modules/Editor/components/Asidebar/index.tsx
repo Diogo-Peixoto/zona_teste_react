@@ -6,33 +6,89 @@ import StarImage from "../../assets/star.svg";
 import LineImage from "../../assets/line.svg";
 import TextImage from "../../assets/editIconText.svg";
 import TriangleImage from "../../assets/triangle.svg";
+import { useMain } from "../../hooks";
+
+interface IAsidebarProps {
+  dragUrl: HTMLImageElement;
+}
 
 const Asidebar = () => {
+  const { dragUrl } = useMain();
+
   return (
     <MainContainer>
       <h3>Arraste o elemento para o editor para inserir no documento</h3>
 
       <div>
         <figure>
-          <img src={TextImage} alt="Texto" />
+          <img
+            src={TextImage}
+            alt="text"
+            draggable
+            onDragStart={(e: any) => {
+              dragUrl.current = e.target.alt;
+            }}
+          />
         </figure>
         <figure>
-          <img src={RetactangleImage} alt="Retangulo" />
+          <img
+            src={RetactangleImage}
+            alt="rectangle"
+            draggable
+            onDragStart={(e: any) => {
+              dragUrl.current = e.target.alt;
+            }}
+          />
         </figure>
         <figure>
-          <img src={CircleImage} alt="Circulo" />
+          <img
+            src={CircleImage}
+            alt="circle"
+            draggable
+            onDragStart={(e: any) => {
+              dragUrl.current = e.target.alt;
+            }}
+          />
         </figure>
         <figure>
-          <img src={TriangleImage} alt="Triangulo" />
+          <img
+            src={TriangleImage}
+            alt="triangle"
+            draggable
+            onDragStart={(e: any) => {
+              dragUrl.current = e.target.alt;
+            }}
+          />
         </figure>
         <figure>
-          <img src={SquareImage} alt="Quadrado" />
+          <img
+            src={SquareImage}
+            alt="square"
+            draggable
+            onDragStart={(e: any) => {
+              dragUrl.current = e.target.alt;
+            }}
+          />
         </figure>
         <figure>
-          <img src={StarImage} alt="Estrela" />
+          <img
+            src={StarImage}
+            alt="star"
+            draggable
+            onDragStart={(e: any) => {
+              dragUrl.current = e.target.alt;
+            }}
+          />
         </figure>
         <figure>
-          <img src={LineImage} alt="Linha" />
+          <img
+            src={LineImage}
+            alt="line"
+            draggable
+            onDragStart={(e: any) => {
+              dragUrl.current = e.target.alt;
+            }}
+          />
         </figure>
       </div>
     </MainContainer>

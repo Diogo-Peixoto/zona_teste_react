@@ -1,10 +1,13 @@
+import { MainProvider } from "./modules/Editor/hooks";
 import Editor from "./modules/Editor/pages";
 import GlobalStyled from "./style/global";
 
 function App() {
   return (
     <>
-      <Editor />
+      <MainProvider>
+        <Editor />
+      </MainProvider>
 
       <GlobalStyled />
     </>
