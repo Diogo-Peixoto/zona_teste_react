@@ -19,6 +19,9 @@ export const MainContainer = styled.div`
   figure {
     height: 70px;
     width: 80px;
+
+    display: flex;
+    align-items: center;
   }
 
   img {
