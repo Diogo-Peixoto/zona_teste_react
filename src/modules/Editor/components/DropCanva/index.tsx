@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 
 const DropCanva = ({ children }: any) => {
   const { stageRef, setDataPages, dragUrl, dataPages } = useMain();
-  console.log(dataPages);
   return (
     <MainContainer
       onDrop={e => {
@@ -40,12 +39,15 @@ const DropCanva = ({ children }: any) => {
           case "star":
             myObject = {
               ...stageRef.current.getPointerPosition(),
+              fill: "#A6A6A6",
+              id: id,
+              numPoints: 5,
+              innerRadius: 20,
+              outerRadius: 40,
               object: dragUrl?.current,
               scaleX: 1.5,
               scaleY: 1.5,
-              fill: "#A6A6A6",
-              draggable: true,
-              id: id
+              draggable: true
             };
             break;
           case "triangle":
@@ -77,7 +79,7 @@ const DropCanva = ({ children }: any) => {
             myObject = {
               ...stageRef.current.getPointerPosition(),
               object: dragUrl?.current,
-              stroke: "#A6A6A6",
+              fill: "#A6A6A6",
               draggable: true,
               points: [0, 0, 100, 0],
               id: id

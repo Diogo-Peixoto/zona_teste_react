@@ -3,7 +3,8 @@ import React, {
   useState,
   useRef,
   ReactNode,
-  useContext
+  useContext,
+  useEffect
 } from "react";
 
 import Konva from "konva";
@@ -13,6 +14,8 @@ interface IMainData {
   setDataPages: any;
   dragUrl: React.MutableRefObject<any>;
   stageRef: React.MutableRefObject<any>;
+  selectObject: string;
+  setSelectObject: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface IMainProviderProps {
@@ -23,12 +26,33 @@ const MainContext = createContext<IMainData>({} as IMainData);
 
 const MainProvider: React.FC<IMainProviderProps> = ({ children }) => {
   const [dataPages, setDataPages] = useState([]);
+  const [selectObject, setSelectObject] = useState("");
   const dragUrl = useRef();
   const stageRef = useRef<Konva.Stage[]>(null);
 
+  useEffect(() => {
+    const data: any = window.localStorage.getItem("data");
+
+    if (dataPages[0] || data === null) {
+      window.localStorage.setItem("data", JSON.stringify(dataPages));
+    }
+  }, [dataPages]);
+
+  useEffect(() => {
+    const data: any = window.localStorage.getItem("data");
+    setDataPages(JSON.parse(data));
+  }, []);
+
   return (
     <MainContext.Provider
-      value={{ dataPages, setDataPages, dragUrl, stageRef }}
+      value={{
+        dataPages,
+        setDataPages,
+        dragUrl,
+        stageRef,
+        selectObject,
+        setSelectObject
+      }}
     >
       {children}
     </MainContext.Provider>

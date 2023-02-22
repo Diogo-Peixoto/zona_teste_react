@@ -1,6 +1,9 @@
-import { Circle, Line, Rect, Star, Text } from "react-konva";
+import { useMain } from "../../hooks";
 import CircleElement from "../Canvas/Circle";
+import LineElement from "../Canvas/Line";
 import Retangle from "../Canvas/Retangle";
+import StarElement from "../Canvas/Star";
+import TextElement from "../Canvas/Text";
 
 interface ITypeElementProps {
   item: {
@@ -15,11 +18,26 @@ interface ITypeElementProps {
     stroke?: string;
     points: [];
     fontSize?: number;
+    numPoints?: number;
+    innerRadius?: number;
+    outerRadius?: number;
+    scaleX?: number;
+    scaleY?: number;
+    text?: string;
   };
 }
 
 const TypeElement = ({ item }: ITypeElementProps) => {
   let RenderObject = null;
+  const { dataPages, setDataPages } = useMain();
+
+  const onChange = (newAttrs: any) => {
+    const previusArray: Array<any> = dataPages.slice();
+    const item = previusArray.find(item => item.id === newAttrs.id);
+    const index = previusArray.lastIndexOf(item);
+    previusArray[index] = newAttrs;
+    setDataPages(previusArray);
+  };
 
   switch (item.object) {
     case "rectangle":
@@ -32,6 +50,8 @@ const TypeElement = ({ item }: ITypeElementProps) => {
           width={item.width!}
           id={item.id}
           draggable={item.draggable}
+          onChange={onChange}
+          item={item}
         />
       );
       break;
@@ -45,77 +65,89 @@ const TypeElement = ({ item }: ITypeElementProps) => {
           width={item.width!}
           id={item.id}
           draggable={item.draggable}
+          onChange={onChange}
+          item={item}
         />
       );
       break;
     case "star":
       RenderObject = (
-        <Star
+        <StarElement
           x={item.x}
           y={item.y}
-          fill={item.fill}
+          fill={item.fill!}
           id={item.id}
-          numPoints={5}
-          innerRadius={20}
-          outerRadius={40}
-          scaleX={1.5}
-          scaleY={1.5}
+          numPoints={item.numPoints!}
+          innerRadius={item.innerRadius!}
+          outerRadius={item.outerRadius!}
+          scaleX={item.scaleX!}
+          scaleY={item.scaleY!}
           draggable={item.draggable}
+          onChange={onChange}
+          item={item}
         />
       );
       break;
     case "triangle":
       RenderObject = (
-        <Star
+        <StarElement
           x={item.x}
           y={item.y}
-          fill={item.fill}
+          fill={item.fill!}
           id={item.id}
-          numPoints={3}
-          innerRadius={20}
-          outerRadius={40}
-          scaleX={1.5}
-          scaleY={1.5}
+          numPoints={item.numPoints!}
+          innerRadius={item.innerRadius!}
+          outerRadius={item.outerRadius!}
+          scaleX={item.scaleX!}
+          scaleY={item.scaleY!}
           draggable={item.draggable}
+          onChange={onChange}
+          item={item}
         />
       );
       break;
     case "square":
       RenderObject = (
-        <Rect
+        <Retangle
           x={item.x}
           y={item.y}
-          fill={item.fill}
-          height={item.height}
-          width={item.width}
+          fill={item.fill!}
+          height={item.height!}
+          width={item.width!}
           id={item.id}
           draggable={item.draggable}
+          onChange={onChange}
+          item={item}
         />
       );
       break;
     case "line":
       RenderObject = (
-        <Line
+        <LineElement
           x={item.x}
           y={item.y}
-          stroke={item.stroke}
+          fill={item.fill!}
           id={item.id}
           points={item.points}
           draggable={item.draggable}
+          onChange={onChange}
+          item={item}
         />
       );
       break;
     case "text":
       RenderObject = (
-        <Text
-          height={item.height}
-          width={item.width}
+        <TextElement
+          height={item.height!}
+          width={item.width!}
           x={item.x}
           y={item.y}
           id={item.id}
-          text="Texto Padrão"
+          text={item.text!}
+          fontSize={item.fontSize!}
           draggable={item.draggable}
-          fontSize={item.fontSize}
+          onChange={onChange}
+          item={item}
         />
       );
       break;

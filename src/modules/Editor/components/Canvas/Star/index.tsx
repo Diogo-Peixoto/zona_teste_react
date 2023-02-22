@@ -1,30 +1,36 @@
-import { Circle, Transformer } from "react-konva";
-import { useMain } from "../../../hooks";
+import { Star, Transformer } from "react-konva";
 import { useEffect, useRef } from "react";
+import { useMain } from "../../../hooks";
 
-interface ICircleProps {
+interface IRetangleProps {
   x: number;
   y: number;
   fill: string;
-  height: number;
-  width: number;
   id: string;
   draggable: boolean;
+  numPoints: number;
+  innerRadius: number;
+  outerRadius: number;
+  scaleX: number;
+  scaleY: number;
   onChange: (newAttrs: any) => void;
   item: any;
 }
 
-const CircleElement = ({
+const StarElement = ({
   x,
   y,
   fill,
-  height,
-  width,
   id,
   draggable,
+  numPoints,
+  innerRadius,
+  outerRadius,
+  scaleX,
+  scaleY,
   onChange,
   item
-}: ICircleProps) => {
+}: IRetangleProps) => {
   const { selectObject, setSelectObject } = useMain();
   const trRef = useRef<any>(null);
   const shapRef = useRef<any>(null);
@@ -37,13 +43,16 @@ const CircleElement = ({
 
   return (
     <>
-      <Circle
+      <Star
         x={x}
         y={y}
         fill={fill}
-        height={height}
-        width={width}
         id={id}
+        numPoints={numPoints}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        scaleX={scaleX}
+        scaleY={scaleY}
         draggable={draggable}
         ref={shapRef}
         onClick={() => setSelectObject(id)}
@@ -79,4 +88,4 @@ const CircleElement = ({
   );
 };
 
-export default CircleElement;
+export default StarElement;

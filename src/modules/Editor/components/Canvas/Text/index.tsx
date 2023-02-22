@@ -1,30 +1,32 @@
-import { Circle, Transformer } from "react-konva";
-import { useMain } from "../../../hooks";
+import { Text, Transformer } from "react-konva";
 import { useEffect, useRef } from "react";
+import { useMain } from "../../../hooks";
 
-interface ICircleProps {
+interface IRetangleProps {
   x: number;
   y: number;
-  fill: string;
-  height: number;
-  width: number;
   id: string;
   draggable: boolean;
+  height: number;
+  width: number;
+  text: string;
+  fontSize: number;
   onChange: (newAttrs: any) => void;
   item: any;
 }
 
-const CircleElement = ({
+const TextElement = ({
   x,
   y,
-  fill,
-  height,
-  width,
   id,
   draggable,
+  height,
+  width,
+  text,
+  fontSize,
   onChange,
   item
-}: ICircleProps) => {
+}: IRetangleProps) => {
   const { selectObject, setSelectObject } = useMain();
   const trRef = useRef<any>(null);
   const shapRef = useRef<any>(null);
@@ -37,14 +39,15 @@ const CircleElement = ({
 
   return (
     <>
-      <Circle
-        x={x}
-        y={y}
-        fill={fill}
+      <Text
         height={height}
         width={width}
+        x={x}
+        y={y}
         id={id}
+        text={text}
         draggable={draggable}
+        fontSize={fontSize}
         ref={shapRef}
         onClick={() => setSelectObject(id)}
         onTransformEnd={() => {
@@ -79,4 +82,4 @@ const CircleElement = ({
   );
 };
 
-export default CircleElement;
+export default TextElement;
