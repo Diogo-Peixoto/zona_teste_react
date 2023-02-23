@@ -16,6 +16,8 @@ interface IMainData {
   stageRef: React.MutableRefObject<any>;
   selectObject: string;
   setSelectObject: React.Dispatch<React.SetStateAction<string>>;
+  setIsGroupSelect: React.Dispatch<React.SetStateAction<boolean>>;
+  isGroupSelect: boolean;
 }
 
 interface IMainProviderProps {
@@ -27,6 +29,7 @@ const MainContext = createContext<IMainData>({} as IMainData);
 const MainProvider: React.FC<IMainProviderProps> = ({ children }) => {
   const [dataPages, setDataPages] = useState([]);
   const [selectObject, setSelectObject] = useState("");
+  const [isGroupSelect, setIsGroupSelect] = useState(false);
   const dragUrl = useRef();
   const stageRef = useRef<Konva.Stage[]>(null);
 
@@ -51,7 +54,9 @@ const MainProvider: React.FC<IMainProviderProps> = ({ children }) => {
         dragUrl,
         stageRef,
         selectObject,
-        setSelectObject
+        setSelectObject,
+        setIsGroupSelect,
+        isGroupSelect
       }}
     >
       {children}

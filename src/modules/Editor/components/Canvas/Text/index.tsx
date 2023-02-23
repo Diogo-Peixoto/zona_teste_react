@@ -48,6 +48,7 @@ const TextElement = ({
         text={text}
         draggable={draggable}
         fontSize={fontSize}
+        name="element"
         ref={shapRef}
         onClick={() => setSelectObject(id)}
         onTransformEnd={() => {

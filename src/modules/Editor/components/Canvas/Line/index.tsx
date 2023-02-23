@@ -43,24 +43,18 @@ const LineElement = ({
         id={id}
         draggable={draggable}
         ref={shapRef}
+        name="element"
         onClick={() => setSelectObject(id)}
         onTransformEnd={() => {
           const node = shapRef.current;
-          const scaleX = node.scaleX();
-          const scaleY = node.scaleY();
-
-          node.scaleX(1);
-          node.scaleY(1);
 
           onChange({
             ...item,
             x: node.x(),
             y: node.y(),
 
-            width: Math.max(5, node.width() * scaleX),
-            height: Math.max(node.height() * scaleY),
-            scaleX: scaleX,
-            scaleY: scaleY
+            width: node.width(),
+            height: node.height()
           });
         }}
         onDragEnd={(e: any) => {

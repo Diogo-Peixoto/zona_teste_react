@@ -45,6 +45,7 @@ const Retangle = ({
         height={height}
         width={width}
         id={id}
+        name="element"
         draggable={draggable}
         onClick={() => setSelectObject(id)}
         onTransformEnd={() => {

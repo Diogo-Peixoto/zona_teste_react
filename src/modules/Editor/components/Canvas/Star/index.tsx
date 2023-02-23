@@ -54,6 +54,7 @@ const StarElement = ({
         scaleX={scaleX}
         scaleY={scaleY}
         draggable={draggable}
+        name="element"
         ref={shapRef}
         onClick={() => setSelectObject(id)}
         onTransformEnd={() => {

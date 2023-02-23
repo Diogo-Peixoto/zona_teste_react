@@ -46,6 +46,7 @@ const CircleElement = ({
         id={id}
         draggable={draggable}
         ref={shapRef}
+        name="element"
         onClick={() => setSelectObject(id)}
         onTransformEnd={() => {
           const node = shapRef.current;
